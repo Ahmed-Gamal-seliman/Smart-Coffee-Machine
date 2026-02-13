@@ -9,6 +9,7 @@ import retrofit2.http.QueryMap
 interface ApiService {
 
     @GET("{pathUrl}")
+    @JvmSuppressWildcards
     suspend fun get(
         @Path(value = "pathUrl", encoded = true) pathUrl: String,
         @HeaderMap headerMap: Map<String, Any>, @QueryMap queryParams: Map<String, Any>

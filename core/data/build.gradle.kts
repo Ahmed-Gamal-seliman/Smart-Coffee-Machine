@@ -23,10 +23,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "BASE_URL", "\"https://localhost:3000/\"")
+            buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:3001/\"")
         }
         debug {
-            buildConfigField("String", "BASE_URL", "\"https://localhost:3000/\"")
+            buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:3001/\"")
         }
     }
     compileOptions {
@@ -55,6 +55,11 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
 
-    api(libs.koin.compose)
+    implementation(libs.koin.compose)
+
+
+
+    implementation(project(":core:domain"))
+
 
 }
