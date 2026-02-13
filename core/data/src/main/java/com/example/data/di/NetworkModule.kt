@@ -1,5 +1,6 @@
 package com.example.data.di
 
+import com.example.data.BuildConfig
 import com.example.data.repository.remote.ApiService
 import com.example.data.repository.remote.NetworkProvider
 import com.example.data.repository.remote.RetrofitNetworkProvider
@@ -11,7 +12,7 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-internal val networkModule = module {
+val networkModule = module {
     single<Gson> {
         GsonBuilder().create()
     }
