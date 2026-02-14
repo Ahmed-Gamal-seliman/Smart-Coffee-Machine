@@ -3,7 +3,6 @@ package com.example.coffeemachine.data.repository.remote
 import android.net.http.HttpException
 import com.example.coffeemachine.data.model.BrewDto
 import com.example.coffeemachine.data.model.HeatingDto
-import com.example.coffeemachine.domain.model.Brew
 import com.example.data.repository.remote.NetworkProvider
 import io.mockk.coEvery
 import io.mockk.coVerify
