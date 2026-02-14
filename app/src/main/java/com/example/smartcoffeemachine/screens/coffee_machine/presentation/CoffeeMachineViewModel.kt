@@ -37,7 +37,7 @@ class CoffeeMachineViewModel(
         ) }
     }
 
-    fun handleCoffeeMachineState(machineEvent: CoffeeMachineEvent) {
+    private fun handleCoffeeMachineState(machineEvent: CoffeeMachineEvent) {
         val current = viewState.value.machineState
 
         val newState = when (current) {
