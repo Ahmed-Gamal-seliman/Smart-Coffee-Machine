@@ -36,7 +36,7 @@ class RetrofitNetworkProviderTest {
     }
 
     @Test
-    fun `when call get from retrofit network provider it should return base response and parse it`() =
+    fun `when call get method from retrofit network provider it should return a response and parse it`() =
         runTest {
             val baseResponse = """
             {
@@ -64,7 +64,7 @@ class RetrofitNetworkProviderTest {
 
     @ParameterizedTest
     @ValueSource(ints = [400, 401, 404, 500, 502, 503])
-    fun `when call get from retrofit network provider and server errors 400 or 500 and it should throw the Exception`(errorCode: Int) =
+    fun `when call get method from retrofit network provider and server return errors 400 or 500  it should throw the Exception as it is`(errorCode: Int) =
         runTest {
             val errorResponse = MockResponse()
                 .setResponseCode(errorCode)
