@@ -1,0 +1,129 @@
+{
+  "uuid": "e03996ce-9d11-4955-9fee-ca51959573da",
+  "lastMigration": 33,
+  "name": "Coffee machine",
+  "endpointPrefix": "",
+  "latency": 5000,
+  "port": 3001,
+  "hostname": "",
+  "folders": [],
+  "routes": [
+    {
+      "uuid": "d5232984-8900-49a1-9e20-68cac2dc7a77",
+      "type": "http",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "startHeat",
+      "responses": [
+        {
+          "uuid": "2b61ace0-3b68-4169-aff9-94e1cb69e63e",
+          "body": "{\r\n  \"code\":\"200\",\r\n  \"message\": \"heating is sucessfully completed\",\r\n  \"state\": \"heating\"\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    },
+    {
+      "uuid": "8e622caa-e5b0-4a6c-9341-73cf3f55a29f",
+      "type": "http",
+      "documentation": "",
+      "method": "get",
+      "endpoint": "startBrew",
+      "responses": [
+        {
+          "uuid": "dfc3124d-ba78-47d0-b5fe-33d21cc19dd0",
+          "body": "{\r\n  \"code\":\"200\",\r\n  \"message\": \"brew is successfully completed\",\r\n  \"state\": \"Brewing\"\r\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [],
+          "bodyType": "INLINE",
+          "filePath": "",
+          "databucketID": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false,
+          "default": true,
+          "crudKey": "id",
+          "callbacks": []
+        }
+      ],
+      "responseMode": null,
+      "streamingMode": null,
+      "streamingInterval": 0
+    }
+  ],
+  "rootChildren": [
+    {
+      "type": "route",
+      "uuid": "d5232984-8900-49a1-9e20-68cac2dc7a77"
+    },
+    {
+      "type": "route",
+      "uuid": "8e622caa-e5b0-4a6c-9341-73cf3f55a29f"
+    }
+  ],
+  "proxyMode": false,
+  "proxyHost": "",
+  "proxyRemovePrefix": false,
+  "tlsOptions": {
+    "enabled": false,
+    "type": "CERT",
+    "pfxPath": "",
+    "certPath": "",
+    "keyPath": "",
+    "caPath": "",
+    "passphrase": ""
+  },
+  "cors": true,
+  "headers": [
+    {
+      "key": "Content-Type",
+      "value": "application/json"
+    },
+    {
+      "key": "Access-Control-Allow-Origin",
+      "value": "*"
+    },
+    {
+      "key": "Access-Control-Allow-Methods",
+      "value": "GET,POST,PUT,PATCH,DELETE,HEAD,OPTIONS"
+    },
+    {
+      "key": "Access-Control-Allow-Headers",
+      "value": "Content-Type, Origin, Accept, Authorization, Content-Length, X-Requested-With"
+    }
+  ],
+  "proxyReqHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "proxyResHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "data": [],
+  "callbacks": []
+}
