@@ -16,16 +16,16 @@ I implemented a Feature Based Modularization strategy This decouples the busines
 
   ## Modules Breakdown
 ### :core
-The foundational layer. It contains pure business logic, base classes, and infrastructure concerns (Networking, Error Handling, String Providers). It is designed to be agnostic of the UI, making it highly reusable across different platforms or future features.
-·	:feature:coffee-machine: A pure logic module containing the Domain (UseCases/Entities), Data (Repository implementations/Data Sources), and DI (Dependency Injection modules).
-·	:app: The "Entry Point" and Presentation Layer. It handles the UI (Compose), ViewModels, and MVI/MVVM Contracts. It coordinates the navigation between features.
+The foundational layer. It contains pure business logic, base classes, and infrastructure concerns (Networking, Error Handling). It is designed to be agnostic of the UI, making it highly reusable across different platforms or future features.
+·	:feature:coffee-machine: A pure logic module containing the Domain (UseCases/Repository interface), Data (Repository implementations/Data Sources), and DI (Dependency Injection modules).
+·	:app: The "Entry Point" and Presentation Layer. It handles the UI (Compose), ViewModels, and MVI Contracts. It coordinates the navigation between features.
 
 
 ### :core:data | Infrastructure & Network Layer
 The Core Data module serves as the architectural backbone for data acquisition, designed with a strict adherence to the Dependency Inversion Principle.
 
 #### Key Architectural Features:
-##### 1- Library Agnostic Networking: By utilizing a custom NetworkProvider interface, the infrastructure is decoupled from specific third-party implementations. This allows the system to switch between Retrofit, Ktor, or any future networking stack without impacting the feature modules.
+##### 1- Library Agnostic Networking: By utilizing a custom NetworkProvider interface, the infrastructure is decoupled from specific third party implementations This allows the system to switch between Retrofit, Ktor, or any future networking stack without impacting the feature modules.
 
 ##### 2- Base Data Transfer Objects (DTOs): Implemented a hierarchy of BaseDto classes to enforce the DRY (Don't Repeat Yourself) principle. This ensures consistent data structures for metadata, timestamps, and common response wrappers across the entire application.
 
@@ -36,10 +36,12 @@ The Domain layer is the Brain of the feature ensuring the business rules are bot
 
 #### Architectural Highlights:
 
-##### 1- Dependency Inversion (DIP): By using interfaces for the Repository and ErrorHandler, the Domain layer defines what it needs, while the Data layer defines how to provide it. This decoupling allows for seamless switching between data sources (Remote vs. Local) or error-handling strategies.
+##### 1- Dependency Inversion (DIP):
+By using interfaces for the Repository and ErrorHandler, the Domain layer defines what it needs, while the Data layer defines how to provide it. This decoupling allows for seamless switching between data sources (Remote vs. Local) or error handling strategies.
 
 
-##### 2- Standardized BaseUseCase: Implemented a generic BaseUseCase using the Template Method Pattern. This orchestrates the flow of data (Loading, Success, and Failure states) in a unified way, drastically reducing boilerplate and ensuring consistent state management across all use cases.
+##### 2- Standardized BaseUseCase:
+Implemented a generic BaseUseCase using the Template Method Pattern This orchestrates the flow of data (Loading, Success, and Failure states) in a unified way, drastically reducing boilerplate and ensuring consistent state management across all use cases.
 
 ##### 3- Abstraction over Implementation:
 
@@ -53,7 +55,7 @@ Each feature is designed as a self contained unit that follows Clean Architectur
 #### Module Architecture & Visibility:
 
   ##### Infrastructure Consumption: 
-    Feature modules have a strict dependency on the :core module This allows them to inherit base classes and common utilities (e.g., BaseUseCase, BaseViewModel, NetworkProvider) ensuring that every feature follows the same structural contract and quality standards.
+    Feature modules have a strict dependency on the :core module This allows them to inherit base classes and common utilities (e.g., BaseUseCase, NetworkProvider) ensuring that every feature follows the same structural contract and quality standards.
 
 # State Management: Finite State Machine (FSM)
 To ensure the Smart Coffee Machine is reliable and safe, I implemented a Finite State Machine using Kotlin Sealed Interfaces. This architectural choice ensures that the machine cannot enter an invalid state.
@@ -87,15 +89,26 @@ Error: A system failure has occurred, requiring a reset.
 2. Guaranteed Cleanup
     By tying side effects to state transitions, I ensured that resources are managed correctly. For instance, moving from Brew to Idle via a BrewingCanceled event triggers an explicit cancelJob(), ensuring no background processes continue to run in an invalid context.
 
+# System State Transition Diagram:
+<img width="1034" height="584" alt="image" src="https://github.com/user-attachments/assets/cf675879-11d8-4c4e-9c85-cdd723e5524e" />
+
 # Resilience & State Persistence
-1. Handling Configuration Changes (e.g., Screen Rotation)
+## 1. Handling Configuration Changes (e.g., Screen Rotation)
     I utilized State Hoisting to move the machine's state ownership from the UI (Composables) into the ViewModel.
 
-    ## Lifecycle Awareness:
-       Since ViewModels are designed to survive configuration changes, the CoffeeMachineState is retained in memory.
+   ### Lifecycle Awareness:
+   Since ViewModels are designed to survive configuration changes, the CoffeeMachineState is retained in memory.
 
-    ## User Experience:
-       If a user rotates the device while the machine is in the Heat or Brew state, the process continues un interrupted. The UI simply reconnects to the existing stream of state updates.
-   
+  ### User Experience:
+   If a user rotates the device while the machine is in the Heat or Brew state, the process continues un interrupted. The UI simply reconnects to the existing stream of state updates.
+
+## 2. Handling System-Initiated Process Death
+  Beyond standard rotation, the application is resilient against Process Death (when the OS kills the app process to reclaim memory).
+
+  ### SavedStateHandle:
+  I integrated SavedStateHandle into the ViewModel to persist the machine's state across process recreation.
+
+  ### Manual Restoration:
+  Upon recreation, the ViewModel's setInitialState() retrieves the last known state (e.g., Ready or Brew) from the system bundle, allowing the machine to remember its progress.
 
 
