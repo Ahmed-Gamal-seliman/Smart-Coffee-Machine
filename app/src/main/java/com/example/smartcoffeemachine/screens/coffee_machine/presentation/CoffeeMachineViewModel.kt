@@ -1,5 +1,7 @@
 package com.example.smartcoffeemachine.screens.coffee_machine.presentation
 
+import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.example.coffeemachine.domain.interactor.CoffeeMachineBrewUseCase
 import com.example.coffeemachine.domain.interactor.CoffeeMachineHeatingUseCase
@@ -10,9 +12,24 @@ import com.example.smartcoffeemachine.screens.coffee_machine.presentation.Coffee
 
 class CoffeeMachineViewModel(
     private val coffeeMachineHeatingUseCase: CoffeeMachineHeatingUseCase,
-    private val coffeeMachineBrewUseCase: CoffeeMachineBrewUseCase
+    private val coffeeMachineBrewUseCase: CoffeeMachineBrewUseCase,
+    private val saveStateHandle: SavedStateHandle
 ) : BaseViewModel<CoffeeMachineContract.Event, CoffeeMachineContract.State>() {
-    override fun setInitialState(): CoffeeMachineContract.State = CoffeeMachineContract.State()
+
+    companion object {
+        const val KEY_STATE = "STATE"
+    }
+
+    override fun setInitialState(): CoffeeMachineContract.State {
+
+
+        val restoredMachineState = saveStateHandle
+            ?.get<String>(KEY_STATE)
+            ?.toCoffeeState()
+            ?: Idle
+
+        return CoffeeMachineContract.State(machineState = restoredMachineState)
+    }
 
 
     override fun handleEvent(event: CoffeeMachineContract.Event) {
@@ -130,6 +147,7 @@ class CoffeeMachineViewModel(
             copy(machineState = newState)
         }
 
+        saveStateHandle[KEY_STATE] = viewState.value.machineState.toString()
     }
 
     private fun onHasCancelButtonChanged(hasCancelButton: Boolean) {
