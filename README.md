@@ -1,6 +1,32 @@
 # ☕ Smart Coffee Machine
 A modular Android application demonstrating a smart coffee machine interface. Built with a focus on Scalability, Testability, and Unidirectional Data Flow.
 
+
+# Getting Started
+Follow these steps to get your local environment synchronized and the project running.
+
+## 1. Prerequisites
+Before you begin, ensure you have the following tools installed:
+
+  - Android Studio.
+
+  - Mockoon Desktop: Required for local API simulation.
+
+## 2. Repository Setup
+  - Clone the project to your local machine.
+
+## 3. API Simulation (Mockoon)
+  - Open Mockoon Desktop.
+  - Go to File > Import > Mockoon's format (JSON).
+  - Locate and select the mock-api-config.json file you will find it in the master branch .
+  - Once imported, click the Green Play button (Start Server) at the top of the Mockoon interface to activate the local endpoints.
+
+## 4. Running the Application
+  - Open the cloned project in Android Studio.
+  - Wait for the Gradle sync to complete successfully.
+  - Select your target device (Emulator).
+  - Click Run app.
+
 ## Feature Based Modularization
 I implemented a Feature Based Modularization strategy This decouples the business logic from the delivery mechanism (UI), ensuring the code base remains maintainable as the team or feature set grows.
 
@@ -15,28 +41,31 @@ I implemented a Feature Based Modularization strategy This decouples the busines
 
 
   ## Modules Breakdown
-### :core
+### 1- core module
 The foundational layer. It contains pure business logic, base classes, and infrastructure concerns (Networking, Error Handling). It is designed to be agnostic of the UI, making it highly reusable across different platforms or future features.
 ·	:feature:coffee-machine: A pure logic module containing the Domain (UseCases/Repository interface), Data (Repository implementations/Data Sources), and DI (Dependency Injection modules).
 ·	:app: The "Entry Point" and Presentation Layer. It handles the UI (Compose), ViewModels, and MVI Contracts. It coordinates the navigation between features.
 
 
-### :core:data | Infrastructure & Network Layer
+### 2- core data module | Infrastructure & Network Layer
 The Core Data module serves as the architectural backbone for data acquisition, designed with a strict adherence to the Dependency Inversion Principle.
 
 #### Key Architectural Features:
-##### 1- Library Agnostic Networking: By utilizing a custom NetworkProvider interface, the infrastructure is decoupled from specific third party implementations This allows the system to switch between Retrofit, Ktor, or any future networking stack without impacting the feature modules.
+##### 1- Library Agnostic Networking:
+By utilizing a custom NetworkProvider interface, the infrastructure is decoupled from specific third party implementations This allows the system to switch between Retrofit, Ktor, or any future networking stack without impacting the feature modules.
 
-##### 2- Base Data Transfer Objects (DTOs): Implemented a hierarchy of BaseDto classes to enforce the DRY (Don't Repeat Yourself) principle. This ensures consistent data structures for metadata, timestamps, and common response wrappers across the entire application.
+##### 2- Base Data Transfer Objects (DTOs):
+Implemented a hierarchy of BaseDto classes to enforce the DRY (Don't Repeat Yourself) principle. This ensures consistent data structures for metadata, timestamps, and common response wrappers across the entire application.
 
-##### 3- Centralized Error Handling: Integrated a robust exception handling strategy that maps raw HTTP/Network exceptions into meaningful Domain Results. This prevents low level leakages into the UI layer.
+##### 3- Centralized Error Handling:
+Integrated a robust exception handling strategy that maps raw HTTP/Network exceptions into meaningful Domain Results. This prevents low level leakages into the UI layer.
 
-### :core:domain | Business Logic & Abstraction
+### 3- core domain module | Business Logic & Abstraction
 The Domain layer is the Brain of the feature ensuring the business rules are both stable and testable.
 
 #### Architectural Highlights:
 
-##### 1- Dependency Inversion (DIP):
+##### 1- Dependency Inversion :
 By using interfaces for the Repository and ErrorHandler, the Domain layer defines what it needs, while the Data layer defines how to provide it. This decoupling allows for seamless switching between data sources (Remote vs. Local) or error handling strategies.
 
 
@@ -45,17 +74,17 @@ Implemented a generic BaseUseCase using the Template Method Pattern This orchest
 
 ##### 3- Abstraction over Implementation:
 
-        ErrorHandler Interface: Decouples business logic from specific network or database exceptions.
+ErrorHandler Interface: Decouples business logic from specific network or database exceptions.
 
-        BaseDomain Entities: Established a base for domain models to enforce the DRY (Don't Repeat Yourself) principle and maintain a clean data contract for the UI.
+BaseDomain Entities: Established a base for domain models to enforce the DRY (Don't Repeat Yourself) principle and maintain a clean data contract for the UI.
 
-### Features Module:
+### 4- Features module:
 Each feature is designed as a self contained unit that follows Clean Architecture principles  These modules depend on :core to leverage shared infrastructure while maintaining their own internal logic.
 
 #### Module Architecture & Visibility:
 
   ##### Infrastructure Consumption: 
-    Feature modules have a strict dependency on the :core module This allows them to inherit base classes and common utilities (e.g., BaseUseCase, NetworkProvider) ensuring that every feature follows the same structural contract and quality standards.
+Feature modules have a strict dependency on the :core module This allows them to inherit base classes and common utilities (e.g., BaseUseCase, NetworkProvider) ensuring that every feature follows the same structural contract and quality standards.
 
 # State Management: Finite State Machine (FSM)
 To ensure the Smart Coffee Machine is reliable and safe, I implemented a Finite State Machine using Kotlin Sealed Interfaces. This architectural choice ensures that the machine cannot enter an invalid state.
@@ -94,7 +123,7 @@ Error: A system failure has occurred, requiring a reset.
 
 # Resilience & State Persistence
 ## 1. Handling Configuration Changes (e.g., Screen Rotation)
-    I utilized State Hoisting to move the machine's state ownership from the UI (Composables) into the ViewModel.
+I utilized State Hoisting to move the machine's state ownership from the UI (Composables) into the ViewModel.
 
    ### Lifecycle Awareness:
    Since ViewModels are designed to survive configuration changes, the CoffeeMachineState is retained in memory.
@@ -102,7 +131,7 @@ Error: A system failure has occurred, requiring a reset.
   ### User Experience:
    If a user rotates the device while the machine is in the Heat or Brew state, the process continues un interrupted. The UI simply reconnects to the existing stream of state updates.
 
-## 2. Handling System-Initiated Process Death
+## 2. Handling System Initiated Process Death
   Beyond standard rotation, the application is resilient against Process Death (when the OS kills the app process to reclaim memory).
 
   ### SavedStateHandle:
