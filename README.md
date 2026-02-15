@@ -86,6 +86,23 @@ Each feature is designed as a self contained unit that follows Clean Architectur
   ##### Infrastructure Consumption: 
 Feature modules have a strict dependency on the :core module This allows them to inherit base classes and common utilities (e.g., BaseUseCase, NetworkProvider) ensuring that every feature follows the same structural contract and quality standards.
 
+### 5- App module:
+The app module serves as the primary entry point and the Presentation Layer of the application It is responsible for UI implementation, and state management using the MVI (Model-View-Intent) pattern.
+
+#### Key Responsibilities:
+  - UI Implementation (Jetpack Compose): Contains the high level UI components and screen layouts, ensuring a modern and reactive user experience.
+  - MVI Architecture: Manages the communication between the user and the system through a strict unidirectional data flow.
+  - States: Immutable representations of the UI at any given moment.
+  - Events (Intents): User actions (e.g. StartBrewing) dispatched to the ViewModel.
+  - Effects: One time side effects like navigation or showing a SnackBar.
+  - ViewModel & State Ownership:ViewModels that interact with Feature UseCases and maintain the Finite State Machine (FSM).
+  - Dependency Injection (DI):  provides concrete implementations to the interfaces defined in the Core and Domain layers.
+
+# High Level System Architecture
+
+<img width="1046" height="561" alt="image" src="https://github.com/user-attachments/assets/7368a9f0-6eb8-4b8a-a28e-7d13ca6b7064" />
+
+
 # State Management: Finite State Machine (FSM)
 To ensure the Smart Coffee Machine is reliable and safe, I implemented a Finite State Machine using Kotlin Sealed Interfaces. This architectural choice ensures that the machine cannot enter an invalid state.
 
