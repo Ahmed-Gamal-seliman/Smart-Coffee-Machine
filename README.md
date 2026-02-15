@@ -93,14 +93,22 @@ Error: A system failure has occurred, requiring a reset.
 <img width="1034" height="584" alt="image" src="https://github.com/user-attachments/assets/cf675879-11d8-4c4e-9c85-cdd723e5524e" />
 
 # Resilience & State Persistence
-1. Handling Configuration Changes (e.g., Screen Rotation)
+## 1. Handling Configuration Changes (e.g., Screen Rotation)
     I utilized State Hoisting to move the machine's state ownership from the UI (Composables) into the ViewModel.
 
-   ## Lifecycle Awareness:
+   ### Lifecycle Awareness:
    Since ViewModels are designed to survive configuration changes, the CoffeeMachineState is retained in memory.
 
-    ## User Experience:
+  ### User Experience:
    If a user rotates the device while the machine is in the Heat or Brew state, the process continues un interrupted. The UI simply reconnects to the existing stream of state updates.
-   
+
+## 2. Handling System-Initiated Process Death
+  Beyond standard rotation, the application is resilient against Process Death (when the OS kills the app process to reclaim memory).
+
+  ### SavedStateHandle:
+  I integrated SavedStateHandle into the ViewModel to persist the machine's state across process recreation.
+
+  ### Manual Restoration:
+  Upon recreation, the ViewModel's setInitialState() retrieves the last known state (e.g., Ready or Brew) from the system bundle, allowing the machine to remember its progress.
 
 
