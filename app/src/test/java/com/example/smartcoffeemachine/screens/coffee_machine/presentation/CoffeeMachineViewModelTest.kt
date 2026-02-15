@@ -34,7 +34,7 @@ class CoffeeMachineViewModelTest {
     @BeforeEach
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-        viewModel = CoffeeMachineViewModel(coffeeMachineHeatUsecase, coffeeMachineBrewUsecase)
+        viewModel = CoffeeMachineViewModel(coffeeMachineHeatUsecase, coffeeMachineBrewUsecase,null)
     }
 
     //idle --> heat

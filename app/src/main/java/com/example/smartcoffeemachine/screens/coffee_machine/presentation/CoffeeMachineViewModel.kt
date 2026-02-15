@@ -13,7 +13,7 @@ import com.example.smartcoffeemachine.screens.coffee_machine.presentation.Coffee
 class CoffeeMachineViewModel(
     private val coffeeMachineHeatingUseCase: CoffeeMachineHeatingUseCase,
     private val coffeeMachineBrewUseCase: CoffeeMachineBrewUseCase,
-    private val saveStateHandle: SavedStateHandle
+    private val saveStateHandle: SavedStateHandle?
 ) : BaseViewModel<CoffeeMachineContract.Event, CoffeeMachineContract.State>() {
 
     companion object {
@@ -147,7 +147,7 @@ class CoffeeMachineViewModel(
             copy(machineState = newState)
         }
 
-        saveStateHandle[KEY_STATE] = viewState.value.machineState.toString()
+        saveStateHandle?.set(KEY_STATE, viewState.value.machineState.toString())
     }
 
     private fun onHasCancelButtonChanged(hasCancelButton: Boolean) {
